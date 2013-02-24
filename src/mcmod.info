@@ -1,0 +1,12 @@
+[
+{
+  "modid": "CPit",
+  "name": "Charcole Pit",
+  "version": "1.1.b75",
+  "updateUrl": "",
+  "authors": [
+    "Emris_Morath"
+  ],
+  "description": "This command makes a Charcoal Pit with the given size.\nThis mod needs TerraFirmaCraft"
+}
+]

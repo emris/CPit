@@ -24,7 +24,7 @@ public class CommandCPit extends CommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
-		return "/" + getCommandName() + " [x] [z] [y] or [del]";
+		return "/" + getCommandName() + " [x] [z] [y] or [del] (max: 25 25 13)";
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class CommandCPit extends CommandBase {
 				if (xSize > 0) {
 					argOK = true;
 					zSize = xSize;
-					ySize = xSize;
+					if (xSize > 13) { ySize = 13; } else { ySize = xSize; }
 				}
 			}
 		} else if (args.length == 2) {
@@ -56,7 +56,7 @@ public class CommandCPit extends CommandBase {
 			if (xSize > 0) {
 				argOK = true;
 				zSize = xSize;
-				ySize = xSize;
+				if (xSize > 13) { ySize = 13; } else { ySize = xSize; }
 			}
 			if (argOK) {
 				argOK = false;
@@ -70,7 +70,7 @@ public class CommandCPit extends CommandBase {
 			if (xSize > 0) {
 				argOK = true;
 				zSize = xSize;
-				ySize = xSize;
+				if (xSize > 13) { ySize = 13; } else { ySize = xSize; }
 			}
 			if (argOK) {
 				argOK = false;
@@ -82,7 +82,7 @@ public class CommandCPit extends CommandBase {
 			if (argOK) {
 				argOK = false;
 				ySize = checkArgs(args[2]);
-				if (ySize > 0) {
+				if (ySize > 0 && ySize < 14) {
 					argOK = true;
 				}
 			}
@@ -99,7 +99,7 @@ public class CommandCPit extends CommandBase {
 
 	private int checkArgs(String s) {
 		int ret = 0;
-		for (int i=2; i < 36; i++) {
+		for (int i=2; i < 26; i++) {
 			if (s.equalsIgnoreCase("" + i)) {
 				ret = Integer.parseInt(s);
 			}

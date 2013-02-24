@@ -11,7 +11,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid="CPit", name="Charcoal Pit", version="1.0.b75")
+@Mod(modid="CPit", name="Charcoal Pit", version="1.1.b75")
 @NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class CPit {
 
