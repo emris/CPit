@@ -2,11 +2,11 @@
 {
   "modid": "CPit",
   "name": "Charcole Pit",
-  "version": "1.1.b75",
+  "version": "1.2.b75",
   "updateUrl": "",
   "authors": [
     "Emris_Morath"
   ],
-  "description": "This command makes a Charcoal Pit with the given size.\nThis mod needs TerraFirmaCraft"
+  "description": "This command makes a Charcoal Pit with the given size between x2 z2 y2 and x25 z25 y13.\nThis mod needs TerraFirmaCraft"
 }
 ]

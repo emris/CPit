@@ -13,7 +13,6 @@ import net.minecraft.world.World;
 import TFC.TFCBlocks;
 import TFC.TFCItems;
 import TFC.TileEntities.TileEntityTerraLogPile;
-import emris.mods.Air.PlayerUtils;
 
 public class CommandCPit extends CommandBase {
 
@@ -97,16 +96,6 @@ public class CommandCPit extends CommandBase {
 		}
 	}
 
-	private int checkArgs(String s) {
-		int ret = 0;
-		for (int i=2; i < 26; i++) {
-			if (s.equalsIgnoreCase("" + i)) {
-				ret = Integer.parseInt(s);
-			}
-		}
-		return ret;
-	}
-	
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender var1) {
 		if (var1 instanceof EntityPlayerMP) {
@@ -126,86 +115,89 @@ public class CommandCPit extends CommandBase {
 		MovingObjectPosition mop = PlayerUtils.getTargetBlock(curPlayer);
 		if (mop != null) {
 			World world = curPlayer.worldObj;
-			//Looking direction: 0 -> South, 1 -> West, 2 -> North, 3 -> East 
-			int look = MathHelper.floor_double((double)(curPlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-
-			int x = mop.blockX;
-			int y = mop.blockY + 1;
-			int z = mop.blockZ;
-			
 			// For the Box around the wood
 			xSize += 2;
 			ySize += 1;
 			zSize += 2;
-		
-			switch(look){
-				case 0:
-					for (int zz = z; zz < (z + zSize); zz++) {
-						for (int xx = x; xx > (x - xSize); xx--) {
-							world.setBlockAndMetadataWithNotify(xx, y, zz, TFCBlocks.StoneIgInBrick.blockID, 1);
-						}
-					}
-					
-					TileEntityTerraLogPile te = null;
-					for (int yy = y + 1; yy <= (y + ySize); yy++) {
-						for (int zz= z + 1; zz < (z + zSize - 1); zz++) {
-							for (int xx = x - 1; xx > (x - xSize + 1); xx--) {
-								if (yy == y + ySize) {
-									world.setBlockWithNotify(xx, yy, zz, Block.glass.blockID);
-								} else {
-									world.setBlockAndMetadataWithNotify(xx, yy, zz, TFCBlocks.LogPile.blockID, 1);
-									te = (TileEntityTerraLogPile)world.getBlockTileEntity(xx, yy, zz);
-									if (te != null) {
-										te.storage[0] = new ItemStack(TFCItems.Logs, 4, 1);
-										te.storage[1] = new ItemStack(TFCItems.Logs, 4, 1);
-										te.storage[2] = new ItemStack(TFCItems.Logs, 4, 1);
-										te.storage[3] = new ItemStack(TFCItems.Logs, 4, 1);
-									}
-								}
-							}
-						}
-						
-						world.setBlockAndMetadataWithNotify(x, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1);
-						world.setBlockAndMetadataWithNotify(x, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1);
-						world.setBlockAndMetadataWithNotify(x - xSize + 1, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1);
-						world.setBlockAndMetadataWithNotify(x - xSize + 1, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1);
 
-						for (int xx = x - 1; xx > (x - xSize + 1); xx--) {
-							if (yy == y + ySize) {
-								world.setBlockAndMetadataWithNotify(xx, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1);
-								world.setBlockAndMetadataWithNotify(xx, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1);
-							} else {
-								world.setBlockWithNotify(xx, yy, z, Block.glass.blockID);
-								world.setBlockWithNotify(xx, yy, z + zSize - 1, Block.glass.blockID);
-							}
-						}
-						for (int zz = z + 1; zz < (z + zSize - 1); zz++) {
-							if (yy ==  y + ySize) {
-								world.setBlockAndMetadataWithNotify(x, yy, zz, TFCBlocks.StoneIgInBrick.blockID, 1);
-								world.setBlockAndMetadataWithNotify(x - xSize + 1, yy, zz, TFCBlocks.StoneIgInBrick.blockID, 1);
-							} else {
-								world.setBlockWithNotify(x, yy, zz, Block.glass.blockID);
-								world.setBlockWithNotify(x - xSize + 1, yy, zz, Block.glass.blockID);
-							}
-						}
-					}
-					break;
+			//Looking direction: 0 -> South, 1 -> West, 2 -> North, 3 -> East 
+			int look = MathHelper.floor_double((double)(curPlayer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			int x = mop.blockX;
+			int y = mop.blockY + 1;
+			int z = mop.blockZ;
+
+			int xz = 0;
+			switch(look) {
 				case 1:
+					z -= xSize - 1;
+					xz = xSize;
+					xSize = zSize;
+					zSize = xz;
 					break;
 				case 2:
+					z -= xSize - 1;
+					x += zSize - 1;
 					break;
 				case 3:
+					x += zSize - 1;
+					xz = xSize;
+					xSize = zSize;
+					zSize = xz;
 					break;
+			}
+			
+			TileEntityTerraLogPile te = null;
+			for (int zz = z; zz < (z + zSize); zz++) {
+				for (int xx = x; xx > (x - xSize); xx--) {
+					world.setBlockAndMetadataWithNotify(xx, y, zz, TFCBlocks.StoneIgInBrick.blockID, 1);
+				}
+			}
+					
+			for (int yy = y + 1; yy <= (y + ySize); yy++) {
+				for (int zz= z + 1; zz < (z + zSize - 1); zz++) {
+					for (int xx = x - 1; xx > (x - xSize + 1); xx--) {
+						if (yy == y + ySize) {
+							world.setBlockWithNotify(xx, yy, zz, Block.glass.blockID);
+						} else {
+							world.setBlockAndMetadataWithNotify(xx, yy, zz, TFCBlocks.LogPile.blockID, 1);
+							te = (TileEntityTerraLogPile)world.getBlockTileEntity(xx, yy, zz);
+							if (te != null) {
+								te.storage[0] = new ItemStack(TFCItems.Logs, 4, 1);
+								te.storage[1] = new ItemStack(TFCItems.Logs, 4, 1);
+								te.storage[2] = new ItemStack(TFCItems.Logs, 4, 1);
+								te.storage[3] = new ItemStack(TFCItems.Logs, 4, 1);
+							}
+						}
+					}
+				}
+				
+				world.setBlockAndMetadataWithNotify(x, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1);
+				world.setBlockAndMetadataWithNotify(x, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1);
+				world.setBlockAndMetadataWithNotify(x - xSize + 1, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1);
+				world.setBlockAndMetadataWithNotify(x - xSize + 1, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1);
+					for (int xx = x - 1; xx > (x - xSize + 1); xx--) {
+					if (yy == y + ySize) {
+						world.setBlockAndMetadataWithNotify(xx, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1);
+						world.setBlockAndMetadataWithNotify(xx, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1);
+					} else {
+						world.setBlockWithNotify(xx, yy, z, Block.glass.blockID);
+						world.setBlockWithNotify(xx, yy, z + zSize - 1, Block.glass.blockID);
+					}
+				}
+				for (int zz = z + 1; zz < (z + zSize - 1); zz++) {
+					if (yy ==  y + ySize) {
+						world.setBlockAndMetadataWithNotify(x, yy, zz, TFCBlocks.StoneIgInBrick.blockID, 1);
+						world.setBlockAndMetadataWithNotify(x - xSize + 1, yy, zz, TFCBlocks.StoneIgInBrick.blockID, 1);
+					} else {
+						world.setBlockWithNotify(x, yy, zz, Block.glass.blockID);
+						world.setBlockWithNotify(x - xSize + 1, yy, zz, Block.glass.blockID);
+					}
+				}
 			}
 		}
 	}
 
 	private void delPit(ICommandSender sender) {
-		int xSize = 0;
-		int zSize = 0;
-		int ySize = 0;
-		Boolean pitOK = false;
-		
 		EntityPlayerMP curPlayer = (EntityPlayerMP) sender;
 		MovingObjectPosition mop = PlayerUtils.getTargetBlock(curPlayer);
 		if (mop != null) {
@@ -218,60 +210,93 @@ public class CommandCPit extends CommandBase {
 			int z = mop.blockZ;
 
 			int bID = world.getBlockId(x, y, z);
+			int pbID = TFCBlocks.StoneIgInBrick.blockID;
 			int meta = world.getBlockMetadata(x, y, z);
-
-			switch(look) {
-				case 0:
-					if (bID == TFCBlocks.StoneIgInBrick.blockID && meta == 1) {
-						int bID2 = world.getBlockId(x - 1, y + 1, z);
-						int bID3 = world.getBlockId(x, y + 1, z + 1);
-						if (bID2 == Block.glass.blockID && bID3 == Block.glass.blockID) {
-							pitOK = true;
-						}
-					}
-					
-					if (pitOK) {
-						int bbID = TFCBlocks.StoneIgInBrick.blockID;
-						Boolean gotY = true;
-						do {
-							ySize += 1;
-							if (world.getBlockId(x, y + ySize, z) == 0) { gotY = false; }
-						} while (gotY);
-						ySize -= 1;
-						
-						Boolean gotX = true;
-						do {
-							xSize +=1;
-							if (world.getBlockId(x - xSize, y, z) != bbID) { gotX = false; }
-						} while (gotX);
-						
-						Boolean gotZ = true;
-						do {
-							zSize += 1;
-							if (world.getBlockId(x, y, z + zSize) != bbID) { gotZ = false; }
-						} while (gotZ);
-						
-						for (int yy = y + ySize; yy >= y; yy--) {
-							for (int zz = z; zz <= (z + zSize); zz++) {
-								for (int xx = x; xx >= (x - xSize); xx--) {
-									world.setBlockWithNotify(xx, yy, zz, 0);
-								}
-							}
-						}
-						sender.sendChatToPlayer("Done");
-					} else {
-						sender.sendChatToPlayer("I do not know this Charcoal Pit!");
-					}
-					break;
+			Boolean pitOK = false;
+			
+			if (bID == pbID && meta == 1) {
+				Boolean gotXY;
+				int sizeXY=0;
+				switch(look) {
 				case 1:
+					gotXY = true;
+					do {
+						if (world.getBlockId(x, y, z) == pbID) { z -= 1; } else { gotXY = false; }
+					} while (gotXY);
+					z += 1;
 					break;
 				case 2:
+					gotXY = true;
+					do {
+						if (world.getBlockId(x, y, z) == pbID) { x += 1; } else { gotXY = false; }
+					} while (gotXY);
+					x -= 1;
+
+					gotXY = true;
+					do {
+						if (world.getBlockId(x, y, z) == pbID) { z -= 1; } else { gotXY = false; }
+					} while (gotXY);
+					z += 1;
 					break;
 				case 3:
+					gotXY = true;
+					do {
+						if (world.getBlockId(x, y, z) == pbID) { x += 1; } else { gotXY = false; }
+					} while (gotXY);
+					x -= 1;
 					break;
+				}
+				int bID2 = world.getBlockId(x - 1, y + 1, z);
+				int bID3 = world.getBlockId(x, y + 1, z + 1);
+				if (bID2 == Block.glass.blockID && bID3 == Block.glass.blockID) {
+					pitOK = true;
+				}
 			}
 			
+			if (pitOK) {
+				int xSize = 0;
+				int zSize = 0;
+				int ySize = 0;
+				Boolean gotY = true;
+				do {
+					if (world.getBlockId(x, y + ySize, z) == 0) { gotY = false; }
+					ySize += 1;
+				} while (gotY);
+
+				Boolean gotX = true;
+				do {
+					xSize +=1;
+					if (world.getBlockId(x - xSize, y, z) != pbID) { gotX = false; }
+				} while (gotX);
+						
+				Boolean gotZ = true;
+				do {
+					zSize += 1;
+					if (world.getBlockId(x, y, z + zSize) != pbID) { gotZ = false; }
+				} while (gotZ);
+						
+				for (int yy = y + ySize; yy >= y; yy--) {
+					for (int zz = z; zz <= (z + zSize); zz++) {
+						for (int xx = x; xx >= (x - xSize); xx--) {
+							world.setBlockWithNotify(xx, yy, zz, 0);
+						}
+					}
+				}
+				sender.sendChatToPlayer("Done");
+			} else {
+				sender.sendChatToPlayer("NOT my Charcoal Pit!");
+			}
 		}
 	}
 
+	private int checkArgs(String s) {
+		int ret = 0;
+		for (int i=2; i < 26; i++) {
+			if (s.equalsIgnoreCase("" + i)) {
+				ret = Integer.parseInt(s);
+			}
+		}
+		return ret;
+	}
+	
 }
