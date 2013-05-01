@@ -1,3 +1,20 @@
+/*
+ *  Copyright (C) 2013  emris
+ *  https://github.com/emris/CPit
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
 package emris.mods.CPit;
 
 import java.util.List;
@@ -12,7 +29,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import TFC.TFCBlocks;
 import TFC.TFCItems;
-import TFC.TileEntities.TileEntityTerraLogPile;
+import TFC.TileEntities.TileEntityLogPile;
 
 public class CommandCPit extends CommandBase {
 
@@ -146,10 +163,10 @@ public class CommandCPit extends CommandBase {
 					break;
 			}
 			
-			TileEntityTerraLogPile te = null;
+			TileEntityLogPile te = null;
 			for (int zz = z; zz < (z + zSize); zz++) {
 				for (int xx = x; xx > (x - xSize); xx--) {
-					world.setBlockAndMetadataWithNotify(xx, y, zz, TFCBlocks.StoneIgInBrick.blockID, 1);
+					world.setBlock(xx, y, zz, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
 				}
 			}
 					
@@ -157,10 +174,12 @@ public class CommandCPit extends CommandBase {
 				for (int zz= z + 1; zz < (z + zSize - 1); zz++) {
 					for (int xx = x - 1; xx > (x - xSize + 1); xx--) {
 						if (yy == y + ySize) {
-							world.setBlockWithNotify(xx, yy, zz, Block.glass.blockID);
+							world.setBlock(xx, yy, zz, Block.glass.blockID);
 						} else {
-							world.setBlockAndMetadataWithNotify(xx, yy, zz, TFCBlocks.LogPile.blockID, 1);
-							te = (TileEntityTerraLogPile)world.getBlockTileEntity(xx, yy, zz);
+							world.setBlock(xx, yy, zz, TFCBlocks.LogPile.blockID, 1, 0x2);
+							if(world.isRemote)
+								world.markBlockForUpdate(xx, yy, zz);
+							te = (TileEntityLogPile)world.getBlockTileEntity(xx, yy, zz);
 							if (te != null) {
 								te.storage[0] = new ItemStack(TFCItems.Logs, 4, 1);
 								te.storage[1] = new ItemStack(TFCItems.Logs, 4, 1);
@@ -171,26 +190,26 @@ public class CommandCPit extends CommandBase {
 					}
 				}
 				
-				world.setBlockAndMetadataWithNotify(x, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1);
-				world.setBlockAndMetadataWithNotify(x, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1);
-				world.setBlockAndMetadataWithNotify(x - xSize + 1, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1);
-				world.setBlockAndMetadataWithNotify(x - xSize + 1, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1);
+				world.setBlock(x, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
+				world.setBlock(x, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
+				world.setBlock(x - xSize + 1, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
+				world.setBlock(x - xSize + 1, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
 					for (int xx = x - 1; xx > (x - xSize + 1); xx--) {
 					if (yy == y + ySize) {
-						world.setBlockAndMetadataWithNotify(xx, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1);
-						world.setBlockAndMetadataWithNotify(xx, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1);
+						world.setBlock(xx, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
+						world.setBlock(xx, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
 					} else {
-						world.setBlockWithNotify(xx, yy, z, Block.glass.blockID);
-						world.setBlockWithNotify(xx, yy, z + zSize - 1, Block.glass.blockID);
+						world.setBlock(xx, yy, z, Block.glass.blockID);
+						world.setBlock(xx, yy, z + zSize - 1, Block.glass.blockID);
 					}
 				}
 				for (int zz = z + 1; zz < (z + zSize - 1); zz++) {
 					if (yy ==  y + ySize) {
-						world.setBlockAndMetadataWithNotify(x, yy, zz, TFCBlocks.StoneIgInBrick.blockID, 1);
-						world.setBlockAndMetadataWithNotify(x - xSize + 1, yy, zz, TFCBlocks.StoneIgInBrick.blockID, 1);
+						world.setBlock(x, yy, zz, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
+						world.setBlock(x - xSize + 1, yy, zz, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
 					} else {
-						world.setBlockWithNotify(x, yy, zz, Block.glass.blockID);
-						world.setBlockWithNotify(x - xSize + 1, yy, zz, Block.glass.blockID);
+						world.setBlock(x, yy, zz, Block.glass.blockID);
+						world.setBlock(x - xSize + 1, yy, zz, Block.glass.blockID);
 					}
 				}
 			}
@@ -278,7 +297,7 @@ public class CommandCPit extends CommandBase {
 				for (int yy = y + ySize; yy >= y; yy--) {
 					for (int zz = z; zz <= (z + zSize); zz++) {
 						for (int xx = x; xx >= (x - xSize); xx--) {
-							world.setBlockWithNotify(xx, yy, zz, 0);
+							world.setBlock(xx, yy, zz, 0);
 						}
 					}
 				}
