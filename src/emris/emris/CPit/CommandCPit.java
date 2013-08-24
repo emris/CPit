@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package emris.mods.CPit;
+package emris.CPit;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -109,7 +110,7 @@ public class CommandCPit extends CommandBase {
 		} else if (argDel) {
 			delPit(sender);
 		} else {
-			sender.sendChatToPlayer(getCommandUsage(sender));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d(getCommandUsage(sender)));
 		}
 	}
 
@@ -301,9 +302,9 @@ public class CommandCPit extends CommandBase {
 						}
 					}
 				}
-				sender.sendChatToPlayer("Done");
+				sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("Done"));
 			} else {
-				sender.sendChatToPlayer("NOT my Charcoal Pit!");
+				sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("NOT my Charcoal Pit!"));
 			}
 		}
 	}

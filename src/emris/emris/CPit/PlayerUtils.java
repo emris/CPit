@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package emris.mods.CPit;
+package emris.CPit;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
@@ -44,8 +44,8 @@ public class PlayerUtils {
 		double v14 = 5.0D; 
 		Vec3 v15 = v5.addVector(v13 * v14, v11 * v14, v12 * v14);
 		
-//        P.sendChatToPlayer("<x" + v2 + ", y" + v3 + ", z" + v4 + ">");
+//        P.sendChatToPlayer(ChatMessageComponent.func_111066_d("<x" + v2 + ", y" + v3 + ", z" + v4 + ">"));
         
-        return P.worldObj.rayTraceBlocks_do(v5, v15, true);
+        return P.worldObj.clip(v5, v15, true);
 	}
 }
