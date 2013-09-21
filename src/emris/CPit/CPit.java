@@ -20,11 +20,10 @@ package emris.CPit;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
-@Mod(modid="CPit", name="Charcoal Pit", version="1.5.b77")
+@Mod(modid="CPit", name="Charcoal Pit", version="1.7.b77")
 @NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class CPit {
 
