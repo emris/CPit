@@ -1,4 +1,4 @@
-/*
+/**
  *  Copyright (C) 2013  emris
  *  https://github.com/emris/CPit
  *
@@ -23,7 +23,7 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
-@Mod(modid="CPit", name="Charcoal Pit", version="1.7.b77")
+@Mod(modid="cpit", name="Charcoal Pit", version="1.7.b77")
 @NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class CPit {
 
