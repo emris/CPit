@@ -46,6 +46,6 @@ public class PlayerUtils
 		double v14 = 5.0D; 
 		Vec3 v15 = v5.addVector(v13 * v14, v11 * v14, v12 * v14);
 
-		return P.worldObj.clip(v5, v15, true);
+		return P.worldObj.rayTraceBlocks(v5, v15, true);
 	}
 }

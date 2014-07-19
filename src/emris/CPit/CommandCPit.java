@@ -19,20 +19,21 @@ package emris.CPit;
 
 import java.util.List;
 
-import buildcraft.energy.TileEngine;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import TFC.TFCBlocks;
-import TFC.TFCItems;
-import TFC.TileEntities.TELogPile;
+
+import com.bioxx.tfc.TFCBlocks;
+import com.bioxx.tfc.TFCItems;
+import com.bioxx.tfc.TileEntities.TELogPile;
 
 public class CommandCPit extends CommandBase
 {
@@ -129,7 +130,7 @@ public class CommandCPit extends CommandBase
 		else if (argDel)
 			delPit(sender);
 		else
-			sender.sendChatToPlayer(ChatMessageComponent.createFromText(getCommandUsage(sender)));
+			sender.addChatMessage(new ChatComponentText(getCommandUsage(sender)));
 	}
 
 	@Override
@@ -191,7 +192,7 @@ public class CommandCPit extends CommandBase
 			{
 				for (int xx = x; xx > (x - xSize); xx--)
 				{
-					world.setBlock(xx, y, zz, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
+					world.setBlock(xx, y, zz, TFCBlocks.StoneIgInBrick, 1, 0x2);
 				}
 			}
 
@@ -203,14 +204,14 @@ public class CommandCPit extends CommandBase
 					{
 						if (yy == y + ySize)
 						{
-							world.setBlock(xx, yy, zz, Block.glass.blockID);
+							world.setBlock(xx, yy, zz, Blocks.glass);
 						}
 						else
 						{
-							world.setBlock(xx, yy, zz, TFCBlocks.LogPile.blockID, 1, 0x2);
+							world.setBlock(xx, yy, zz, TFCBlocks.LogPile, 1, 0x2);
 							if(world.isRemote)
 								world.markBlockForUpdate(xx, yy, zz);
-							te = (TELogPile)world.getBlockTileEntity(xx, yy, zz);
+							te = (TELogPile)world.getTileEntity(xx, yy, zz);
 							if (te != null)
 							{
 								te.storage[0] = new ItemStack(TFCItems.Logs, 4, 1);
@@ -222,34 +223,34 @@ public class CommandCPit extends CommandBase
 					}
 				}
 
-				world.setBlock(x, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
-				world.setBlock(x, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
-				world.setBlock(x - xSize + 1, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
-				world.setBlock(x - xSize + 1, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
+				world.setBlock(x, yy, z, TFCBlocks.StoneIgInBrick, 1, 0x2);
+				world.setBlock(x, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick, 1, 0x2);
+				world.setBlock(x - xSize + 1, yy, z, TFCBlocks.StoneIgInBrick, 1, 0x2);
+				world.setBlock(x - xSize + 1, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick, 1, 0x2);
 				for (int xx = x - 1; xx > (x - xSize + 1); xx--)
 				{
 					if (yy == y + ySize)
 					{
-						world.setBlock(xx, yy, z, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
-						world.setBlock(xx, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
+						world.setBlock(xx, yy, z, TFCBlocks.StoneIgInBrick, 1, 0x2);
+						world.setBlock(xx, yy, z + zSize - 1, TFCBlocks.StoneIgInBrick, 1, 0x2);
 					}
 					else
 					{
-						world.setBlock(xx, yy, z, Block.glass.blockID);
-						world.setBlock(xx, yy, z + zSize - 1, Block.glass.blockID);
+						world.setBlock(xx, yy, z, Blocks.glass);
+						world.setBlock(xx, yy, z + zSize - 1, Blocks.glass);
 					}
 				}
 				for (int zz = z + 1; zz < (z + zSize - 1); zz++)
 				{
 					if (yy ==  y + ySize)
 					{
-						world.setBlock(x, yy, zz, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
-						world.setBlock(x - xSize + 1, yy, zz, TFCBlocks.StoneIgInBrick.blockID, 1, 0x2);
+						world.setBlock(x, yy, zz, TFCBlocks.StoneIgInBrick, 1, 0x2);
+						world.setBlock(x - xSize + 1, yy, zz, TFCBlocks.StoneIgInBrick, 1, 0x2);
 					}
 					else
 					{
-						world.setBlock(x, yy, zz, Block.glass.blockID);
-						world.setBlock(x - xSize + 1, yy, zz, Block.glass.blockID);
+						world.setBlock(x, yy, zz, Blocks.glass);
+						world.setBlock(x - xSize + 1, yy, zz, Blocks.glass);
 					}
 				}
 			}
@@ -270,8 +271,8 @@ public class CommandCPit extends CommandBase
 			int y = mop.blockY;
 			int z = mop.blockZ;
 
-			int bID = world.getBlockId(x, y, z);
-			int pbID = TFCBlocks.StoneIgInBrick.blockID;
+			Block bID = world.getBlock(x, y, z);
+			Block pbID = TFCBlocks.StoneIgInBrick;
 			int meta = world.getBlockMetadata(x, y, z);
 			Boolean pitOK = false;
 
@@ -284,34 +285,34 @@ public class CommandCPit extends CommandBase
 				case 1:
 					gotXY = true;
 					do {
-						if (world.getBlockId(x, y, z) == pbID) { z -= 1; } else { gotXY = false; }
+						if (world.getBlock(x, y, z) == pbID) { z -= 1; } else { gotXY = false; }
 					} while (gotXY);
 					z += 1;
 					break;
 				case 2:
 					gotXY = true;
 					do {
-						if (world.getBlockId(x, y, z) == pbID) { x += 1; } else { gotXY = false; }
+						if (world.getBlock(x, y, z) == pbID) { x += 1; } else { gotXY = false; }
 					} while (gotXY);
 					x -= 1;
 
 					gotXY = true;
 					do {
-						if (world.getBlockId(x, y, z) == pbID) { z -= 1; } else { gotXY = false; }
+						if (world.getBlock(x, y, z) == pbID) { z -= 1; } else { gotXY = false; }
 					} while (gotXY);
 					z += 1;
 					break;
 				case 3:
 					gotXY = true;
 					do {
-						if (world.getBlockId(x, y, z) == pbID) { x += 1; } else { gotXY = false; }
+						if (world.getBlock(x, y, z) == pbID) { x += 1; } else { gotXY = false; }
 					} while (gotXY);
 					x -= 1;
 					break;
 				}
-				int bID2 = world.getBlockId(x - 1, y + 1, z);
-				int bID3 = world.getBlockId(x, y + 1, z + 1);
-				if (bID2 == Block.glass.blockID && bID3 == Block.glass.blockID)
+				Block bID2 = world.getBlock(x - 1, y + 1, z);
+				Block bID3 = world.getBlock(x, y + 1, z + 1);
+				if (bID2 == Blocks.glass && bID3 == Blocks.glass)
 					pitOK = true;
 			}
 
@@ -322,20 +323,20 @@ public class CommandCPit extends CommandBase
 				int ySize = 0;
 				Boolean gotY = true;
 				do {
-					if (world.getBlockId(x, y + ySize, z) == 0) { gotY = false; }
+					if (world.isAirBlock(x, y + ySize, z)) { gotY = false; }
 					ySize += 1;
 				} while (gotY);
 
 				Boolean gotX = true;
 				do {
 					xSize +=1;
-					if (world.getBlockId(x - xSize, y, z) != pbID) { gotX = false; }
+					if (world.getBlock(x - xSize, y, z) != pbID) { gotX = false; }
 				} while (gotX);
 
 				Boolean gotZ = true;
 				do {
 					zSize += 1;
-					if (world.getBlockId(x, y, z + zSize) != pbID) { gotZ = false; }
+					if (world.getBlock(x, y, z + zSize) != pbID) { gotZ = false; }
 				} while (gotZ);
 
 				TELogPile telp = null;
@@ -346,7 +347,7 @@ public class CommandCPit extends CommandBase
 					{
 						for (int xx = x; xx >= (x - xSize); xx--)
 						{
-							te = world.getBlockTileEntity(xx, yy, zz);
+							te = world.getTileEntity(xx, yy, zz);
 							if (te != null && te instanceof TELogPile)
 							{
 								telp = (TELogPile) te;
@@ -359,11 +360,11 @@ public class CommandCPit extends CommandBase
 						}
 					}
 				}
-				sender.sendChatToPlayer(ChatMessageComponent.createFromText("Done"));
+				sender.addChatMessage(new ChatComponentText("Done"));
 			}
 			else
 			{
-				sender.sendChatToPlayer(ChatMessageComponent.createFromText("NOT my Charcoal Pit!"));
+				sender.addChatMessage(new ChatComponentText("NOT my Charcoal Pit!"));
 			}
 		}
 	}

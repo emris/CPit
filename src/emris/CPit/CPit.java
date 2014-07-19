@@ -21,10 +21,8 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 
-@Mod(modid="cpit", name="Charcoal Pit", version="1.8.B78")
-@NetworkMod(clientSideRequired=false, serverSideRequired=false)
+@Mod(modid="cpit", name="Charcoal Pit", version="1.9.B79")
 public class CPit
 {
 	@Instance("CPit")
