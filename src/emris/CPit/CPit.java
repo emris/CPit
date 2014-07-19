@@ -23,15 +23,16 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
-@Mod(modid="cpit", name="Charcoal Pit", version="1.7.b77")
+@Mod(modid="cpit", name="Charcoal Pit", version="1.8.B78")
 @NetworkMod(clientSideRequired=false, serverSideRequired=false)
-public class CPit {
-
+public class CPit
+{
 	@Instance("CPit")
 	public static CPit instance;
 	
 	@EventHandler
-	public void serverStarting(FMLServerStartingEvent event) {
+	public void serverStarting(FMLServerStartingEvent event)
+	{
 		event.registerServerCommand(new CommandCPit());
 	}
 }
